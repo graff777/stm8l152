@@ -1,0 +1,23 @@
+#include "stm8l15x.h"
+
+
+void delay(uint32_t time)
+{
+	while(time--);
+}
+
+main()
+{
+	GPIO_DeInit(GPIOC);
+	GPIO_Init(GPIOC, GPIO_Pin_7, GPIO_Mode_Out_PP_Low_Fast);
+	//GPIO_DeInit(GPIOA);
+	
+
+
+	
+	while (1)
+	{
+		GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
+		delay(40000);
+	}
+}
