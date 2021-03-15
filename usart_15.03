@@ -1,7 +1,7 @@
 #include "stm8l15x.h"
 #include "stdio.h"
-
-
+//#include "intrinsics.h"
+#pragma intrinsic
 void delay(uint32_t time)
 {
 	while(time--);
@@ -12,22 +12,26 @@ main()
 	GPIO_DeInit(GPIOC); // 
   GPIOC->DDR |= GPIO_Pin_3;  //Порт PC3 на выход
 	GPIOC->CR1 |= GPIO_Pin_3;  //Порт PC3 push-pull
+	
+	GPIOC->CR2 &=~ GPIO_Pin_3; //Speed 2MHz
 	GPIOC->DDR &=~ GPIO_Pin_2; //PC2 на вход
 	GPIOC->CR1 &=~ GPIO_Pin_2; //PC2 in floating
-  USART_DeInit(USART1);
+  CLK_DeInit();
+	//CLK->CKDIVR=0x00; //делитель частоты = 1  
+	//CLK->PCKENR1->PCKEN15 =1;
+	//USART_DeInit(USART1);
+	USART1->BRR2=0x03;
+	USART1->BRR1=0x68;
 	
-	
-	
-	
-	USART_Init(USART1, 
+  USART_Init(USART1, 
 	           9600, 
 	           USART_WordLength_8b, 
 						 USART_StopBits_1, 
 						 USART_Parity_No, 
 						 USART_Mode_Rx | USART_Mode_Tx);
 
-	
-	
+
+ __enable_interrupt ();
 	USART_ClockInit(USART1, 
 	                     USART_Clock_Enable,
                        USART_CPOL_Low, 
@@ -35,7 +39,7 @@ main()
                        USART_LastBit_Enable);
 	//USART_Cmd(USART1, ENABLE);										 
 	USART_SetPrescaler(USART1, 1);										 
-  //USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+  USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
 	while (1)
 	{
 	  printf("hhh");
@@ -53,4 +57,3 @@ while (1)
   }
 }
 #endif
-
