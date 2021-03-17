@@ -1,0 +1,50 @@
+#include "stm8l15x.h"
+#include "stdio.h"
+
+																		/*=== Работа UART в режиме прерываний (Interrupt MODE) ===*/
+@far @interrupt void USART_ITConfig(void)        // прерывание по событию - передача байта
+{
+
+
+}
+void uart_tx_byte
+ 
+main()
+{
+	  CLK->CLK
+		CLK_DeInit();                                // Включение тактирования  
+	  GPIO_DeInit(GPIOC);                          // Тактирование перефирийного блока GPIOC
+		GPIOC->DDR |= GPIO_Pin_3;                    // Конфигурирование порта PC3 на выход
+	  GPIOC->CR1 |= GPIO_Pin_3;                    // Конфигурирование порта PC3 как push pull
+		CLK_PeripheralClockConfig(CLK_Peripheral_USART1, ENABLE); // Тактирование перефирийного блока USART1
+		USART_Init(USART1, 
+                9600, 
+								USART_WordLength_8b, 
+								USART_StopBits_1,
+                USART_Parity_No,  
+								USART_Mode_Tx);
+		USART_ClockInit(USART1,                      //Настройка частоты USART1
+								USART_Clock_Enable,
+								USART_CPOL_Low,
+								USART_CPHA_1Edge,
+								USART_LastBit_Enable);
+	  USART_SetPrescaler(USART1, 1);
+		USART_ITConfig(USART1, USART_IT_TXE, ENABLE);// событие - конец передачи байта
+		
+    while()                      
+				
+
+while(1)
+{
+	
+}
+}
+
+#ifdef USE_FULL_ASSERT
+void assert_failed(uint8_t* file, uint32_t line)
+{
+while (1)
+  {
+  }
+}
+#endif
